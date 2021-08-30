@@ -4,7 +4,7 @@
  * File Created: 30-08-2021 15:55:45
  * Author: Clay Risser <email@clayrisser.com>
  * -----
- * Last Modified: 30-08-2021 17:35:53
+ * Last Modified: 30-08-2021 18:08:13
  * Modified By: Clay Risser <email@clayrisser.com>
  * -----
  * BitSpur Inc. (c) Copyright 2021
@@ -78,6 +78,7 @@ export interface CoupledBody {
   socketConfig: HashMap<string>;
   version: string;
 }
+
 export interface UpdatedBody {
   version: string;
   plug: Plug;
