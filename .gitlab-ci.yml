@@ -14,3 +14,5 @@ docker-build:
       fi
     - make -s docker-build ARGS="$ARGS" TAG="$TAG"
     - make -s docker-push ARGS="$ARGS" TAG="$TAG"
+  when:
+    - manual
