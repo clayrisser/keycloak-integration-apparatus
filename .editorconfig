@@ -1,0 +1,41 @@
+root = true
+
+[*]
+end_of_line = lf
+indent_size = 2
+indent_style = space
+insert_final_newline = true
+trim_trailing_whitespace = true
+
+[*.{js,jsx,ts,tsx,json}]
+charset = utf-8
+
+[App.config]
+charset = utf-8
+end_of_line = crlf
+indent_size = 4
+
+[*.cs]
+charset = utf-8
+end_of_line = crlf
+indent_size = 4
+
+[*.{csproj,csproj.user,resx}]
+charset = utf-8
+end_of_line = crlf
+
+[*.md]
+charset = utf-8
+trim_trailing_whitespace = false
+
+[*.py]
+charset = utf-8
+indent_size = 4
+
+[{M,m}akefile{,.*}]
+charset = utf-8
+indent_style = tab
+
+[*.mk]
+charset = utf-8
+indent_style = tab

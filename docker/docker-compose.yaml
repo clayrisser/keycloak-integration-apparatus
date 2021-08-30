@@ -1,0 +1,12 @@
+version: '3.7'
+
+services:
+  app:
+    container_name: ${CONTAINER_NAME}
+    image: ${IMAGE}:${TAG}
+    ports:
+      - 3000:3000
+    environment:
+      DEBUG: '1'
+      GRAPHQL_PLAYGROUND: '1'
+      SWAGGER: '1'

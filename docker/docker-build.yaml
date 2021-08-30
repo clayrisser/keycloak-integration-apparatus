@@ -1,0 +1,17 @@
+version: '2'
+
+services:
+  main:
+    image: ${IMAGE}:${TAG}
+    build:
+      context: ..
+      dockerfile: docker/context/Dockerfile
+  major:
+    extends: main
+    image: ${IMAGE}:${MAJOR}
+  minor:
+    extends: main
+    image: ${IMAGE}:${MAJOR}.${MINOR}
+  patch:
+    extends: main
+    image: ${IMAGE}:${MAJOR}.${MINOR}.${PATCH}
