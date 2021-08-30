@@ -7,10 +7,6 @@ RUN apt-get update && apt-get install -y \
   make \
   python
 
-# disable git
-RUN cp $(which git) $(which git)_ && \
-  cp $(which true) $(which git)
-
 COPY package*.json *.mk Makefile /code/
 RUN make -s +install
 
@@ -24,7 +20,8 @@ WORKDIR /opt/app
 
 RUN apk add --no-cache \
   make \
-  musl
+  musl \
+  tini
 
 COPY docker/context/entrypoint.sh /usr/local/sbin/entrypoint
 RUN chmod +x /usr/local/sbin/entrypoint
