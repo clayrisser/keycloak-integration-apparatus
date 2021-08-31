@@ -4,7 +4,7 @@
  * File Created: 30-08-2021 18:07:12
  * Author: Clay Risser <email@clayrisser.com>
  * -----
- * Last Modified: 30-08-2021 18:08:53
+ * Last Modified: 30-08-2021 19:01:31
  * Modified By: Clay Risser <email@clayrisser.com>
  * -----
  * BitSpur Inc. (c) Copyright 2021
@@ -22,13 +22,82 @@
  * limitations under the License.
  */
 
+import KcAdminClient from 'keycloak-admin';
 import { Logger, Injectable } from '@nestjs/common';
 
 @Injectable()
 export default class SocketService {
   private readonly logger = new Logger(SocketService.name);
 
-  async createClient(clientId: string, clientSecret: string) {
-    this.logger.debug({ clientId, clientSecret });
+  async createClient(options: CreateClientOptions) {
+    const {
+      adminPassword,
+      adminUsername,
+      authorizationServicesEnabled,
+      baseUrl,
+      clientId,
+      clientSecret,
+      directAccessGrantsEnabled,
+      implicitFlowEnabled,
+      name,
+      realmName,
+      redirectUris,
+      serviceAccountsEnabled
+    }: CreateClientOptions = {
+      adminUsername: 'admin',
+      authorizationServicesEnabled: true,
+      baseUrl: 'http://127.0.0.1:8080',
+      directAccessGrantsEnabled: true,
+      implicitFlowEnabled: true,
+      realmName: 'master',
+      redirectUris: ['*'],
+      serviceAccountsEnabled: true,
+      ...options
+    };
+    const keycloakAdmin = new KcAdminClient({ baseUrl: `${baseUrl}/auth` });
+    await keycloakAdmin.auth({
+      clientId: 'admin-cli',
+      grantType: 'password',
+      password: adminPassword,
+      username: adminUsername
+    });
+    keycloakAdmin.setConfig({ realmName });
+    const client = (await keycloakAdmin!.clients.find({ clientId }))?.[0];
+    if (client) {
+      this.logger.log(`client ${clientId} already exists`);
+      return;
+    }
+    await keycloakAdmin!.clients.create({
+      clientId,
+      directAccessGrantsEnabled,
+      implicitFlowEnabled,
+      name: name || clientId,
+      protocol: 'openid-connect',
+      publicClient: !clientSecret?.length,
+      redirectUris,
+      ...(clientSecret?.length
+        ? {
+            authorizationServicesEnabled,
+            secret: clientSecret,
+            serviceAccountsEnabled
+          }
+        : {})
+    });
+    this.logger.log(`created client ${clientId}`);
   }
+}
+
+export interface CreateClientOptions {
+  adminPassword: string;
+  adminUsername?: string;
+  authorizationServicesEnabled?: boolean;
+  baseUrl?: string;
+  clientId: string;
+  clientSecret?: string;
+  directAccessGrantsEnabled?: boolean;
+  implicitFlowEnabled?: boolean;
+  name?: string;
+  realmName?: string;
+  redirectUris?: string[];
+  serviceAccountsEnabled?: boolean;
 }

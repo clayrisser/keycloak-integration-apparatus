@@ -4,7 +4,7 @@
  * File Created: 30-08-2021 15:55:45
  * Author: Clay Risser <email@clayrisser.com>
  * -----
- * Last Modified: 30-08-2021 17:35:56
+ * Last Modified: 30-08-2021 18:26:48
  * Modified By: Clay Risser <email@clayrisser.com>
  * -----
  * BitSpur Inc. (c) Copyright 2021
@@ -25,13 +25,14 @@
 import { Module } from '@nestjs/common';
 import { HttpModule } from '@nestjs/axios';
 import SocketController from './controller';
+import SocketService from './service';
 
 @Module({
   controllers: [SocketController],
-  exports: [],
+  exports: [SocketService],
   imports: [HttpModule],
-  providers: []
+  providers: [SocketService]
 })
-export default class AuthModule {}
+export default class SocketModule {}
 
-export { SocketController };
+export { SocketController, SocketService };

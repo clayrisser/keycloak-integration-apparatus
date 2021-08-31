@@ -1,13 +1,13 @@
 /**
  * File: /src/modules/index.ts
- * Project: example-graphback-nestjs
- * File Created: 24-06-2021 04:03:49
+ * Project: keycloak-socket
+ * File Created: 30-08-2021 15:55:45
  * Author: Clay Risser <email@clayrisser.com>
  * -----
- * Last Modified: 30-08-2021 17:39:14
+ * Last Modified: 30-08-2021 18:27:02
  * Modified By: Clay Risser <email@clayrisser.com>
  * -----
- * Silicon Hills LLC (c) Copyright 2021
+ * BitSpur Inc. (c) Copyright 2021
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -22,6 +22,6 @@
  * limitations under the License.
  */
 
-import DeviceModule from './socket';
+import SocketModule from './socket';
 
-export default [DeviceModule];
+export default [SocketModule];

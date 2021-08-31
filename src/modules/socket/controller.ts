@@ -4,7 +4,7 @@
  * File Created: 30-08-2021 15:55:45
  * Author: Clay Risser <email@clayrisser.com>
  * -----
- * Last Modified: 30-08-2021 18:08:13
+ * Last Modified: 30-08-2021 19:17:08
  * Modified By: Clay Risser <email@clayrisser.com>
  * -----
  * BitSpur Inc. (c) Copyright 2021
@@ -24,9 +24,12 @@
 
 import { Body, Logger, Controller, Get, Post } from '@nestjs/common';
 import { HashMap, Plug, Socket } from '~/types';
+import SocketService from './service';
 
 @Controller('socket')
 export default class SocketController {
+  constructor(private readonly socketService: SocketService) {}
+
   private readonly logger = new Logger(SocketController.name);
 
   @Get('ping')
@@ -37,7 +40,18 @@ export default class SocketController {
   @Post('config')
   async postConfig(@Body() body: ConfigBody) {
     this.logger.log('socket config');
-    return body?.data || {};
+    const config = {
+      keycloakAdminPassword: Buffer.from(
+        body.vars?.BASE64_ENCODED_KEYCLOAK_ADMIN_PASSWORD || '',
+        'base64'
+      ).toString('utf-8'),
+      keycloakAdminUsername: Buffer.from(
+        body.vars?.BASE64_ENCODED_KEYCLOAK_ADMIN_USERNAME || '',
+        'base64'
+      ).toString('utf-8')
+    };
+    this.logger.log('config', config);
+    return config;
   }
 
   @Post('created')
@@ -47,7 +61,29 @@ export default class SocketController {
 
   @Post('coupled')
   async postCoupled(@Body() body: CoupledBody): Promise<void> {
-    this.logger.log('socket coupled', body?.plugConfig);
+    this.logger.log('socket coupled', body?.plugConfig, body?.socketConfig);
+    this.logger.log({
+      adminPassword: body.socketConfig.keycloakAdminPassword,
+      adminUsername: body.socketConfig.keycloakAdminUsername,
+      baseUrl: body.socketConfig.keycloakBaseUrl,
+      clientId: body.plugConfig.clientId,
+      clientSecret: body.plugConfig.clientSecret,
+      realmName: body.socketConfig.keycloakRealm,
+      redirectUris: body.plugConfig.redirectUris?.length
+        ? body.plugConfig.redirectUris.split(',')
+        : ['*']
+    });
+    await this.socketService.createClient({
+      adminPassword: body.socketConfig.keycloakAdminPassword,
+      adminUsername: body.socketConfig.keycloakAdminUsername,
+      baseUrl: body.socketConfig.keycloakBaseUrl,
+      clientId: body.plugConfig.clientId,
+      clientSecret: body.plugConfig.clientSecret,
+      realmName: body.socketConfig.keycloakRealm,
+      redirectUris: body.plugConfig.redirectUris?.length
+        ? body.plugConfig.redirectUris.split(',')
+        : ['*']
+    });
   }
 
   @Post('updated')
