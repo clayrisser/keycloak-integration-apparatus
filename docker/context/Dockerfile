@@ -6,6 +6,8 @@ RUN apt-get update && apt-get install -y \
   build-essential \
   make \
   python
+RUN apt-get remove -y \
+  git
 
 COPY package*.json *.mk Makefile /code/
 RUN make -s +install
@@ -30,7 +32,7 @@ COPY --from=builder /code/dist ./dist
 COPY --from=builder /code/node_modules ./node_modules
 COPY --from=builder /code/package*.json ./
 
-ENTRYPOINT [ "/usr/local/sbin/entrypoint" ]
+ENTRYPOINT [ "/sbin/tini", "--", "/usr/local/sbin/entrypoint" ]
 
 EXPOSE 3000
 
