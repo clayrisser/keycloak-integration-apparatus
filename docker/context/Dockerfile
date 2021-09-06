@@ -21,16 +21,14 @@ FROM node:14-alpine
 WORKDIR /opt/app
 
 RUN apk add --no-cache \
-  make \
-  musl \
   tini
 
 COPY docker/context/entrypoint.sh /usr/local/sbin/entrypoint
 RUN chmod +x /usr/local/sbin/entrypoint
 
+COPY --from=builder /code/.env /code/package*.json ./
 COPY --from=builder /code/dist ./dist
 COPY --from=builder /code/node_modules ./node_modules
-COPY --from=builder /code/package*.json ./
 
 ENTRYPOINT [ "/sbin/tini", "--", "/usr/local/sbin/entrypoint" ]
 
