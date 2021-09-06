@@ -4,7 +4,7 @@
  * File Created: 30-08-2021 15:55:45
  * Author: Clay Risser <email@clayrisser.com>
  * -----
- * Last Modified: 30-08-2021 17:35:27
+ * Last Modified: 05-09-2021 20:35:26
  * Modified By: Clay Risser <email@clayrisser.com>
  * -----
  * BitSpur Inc. (c) Copyright 2021
@@ -44,7 +44,9 @@ const { env } = process;
 export async function createApp(
   adapter: Adapter
 ): Promise<NestExpressApplication | NestFastifyApplication> {
-  let logLevels = (env.LOG_LEVELS || '').split(',') as LogLevel[];
+  let logLevels = (env.LOG_LEVELS || '')
+    .split(',')
+    .filter(Boolean) as LogLevel[];
   if (!logLevels.length || !!Number(env.DEBUG)) {
     logLevels = ['error', 'warn', 'log', 'debug', 'verbose'];
   }
