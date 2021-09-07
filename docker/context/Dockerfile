@@ -6,8 +6,6 @@ RUN apt-get update && apt-get install -y \
   build-essential \
   make \
   python
-RUN apt-get remove -y \
-  git
 
 COPY package*.json *.mk Makefile /code/
 RUN make -s +install
