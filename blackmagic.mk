@@ -3,7 +3,7 @@
 # File Created: 30-08-2021 15:55:45
 # Author: Clay Risser <email@clayrisser.com>
 # -----
-# Last Modified: 07-09-2021 02:08:08
+# Last Modified: 07-09-2021 02:52:18
 # Modified By: Clay Risser <email@clayrisser.com>
 # -----
 # BitSpur Inc. (c) Copyright 2021
@@ -178,6 +178,7 @@ ifneq ($$({{ACTION_UPPER}}_READY),true)
 	$$({{ACTION_UPPER}}_TARGET) $$(ACTION)/{{ACTION}}
 +{{ACTION}}: | $$(CHECK) _{{ACTION}} $$({{ACTION_UPPER}}_DEPS) \
 	$$({{ACTION_UPPER}}_TARGET) $$(ACTION)/{{ACTION}}
+	@echo aa
 _{{ACTION}}:
 	@touch -m $$(DONE)/+{{ACTION}}
 	@$$(call clear_cache,$$(DONE)/_{{ACTION}})
