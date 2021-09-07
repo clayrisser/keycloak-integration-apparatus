@@ -4,7 +4,7 @@
  * File Created: 30-08-2021 16:00:32
  * Author: Clay Risser <email@clayrisser.com>
  * -----
- * Last Modified: 30-08-2021 17:36:06
+ * Last Modified: 07-09-2021 01:05:58
  * Modified By: Clay Risser <email@clayrisser.com>
  * -----
  * BitSpur Inc. (c) Copyright 2021
@@ -23,14 +23,14 @@
  */
 
 import { Var } from 'kustomize-operator';
-import { V1Container } from '@kubernetes/client-node';
+import k8s from '@kubernetes/client-node';
 import { HashMap } from '~/types';
 
-export interface Socket {
+export interface Socket extends k8s.KubernetesObject {
   spec?: SocketSpec; // SocketSpec `json:"spec,omitempty"`
 }
 
-export interface Plug {
+export interface Plug extends k8s.KubernetesObject {
   spec?: PlugSpec; // PlugSpec `json:"spec,omitempty"`
 }
 
@@ -68,7 +68,7 @@ export interface SocketSpec {
 }
 
 export interface Apparatus {
-  containers?: V1Container[]; // []*v1.Container `json:"containers,omitempty"`
+  containers?: k8s.V1Container[]; // []*v1.Container `json:"containers,omitempty"`
   endpoint?: string; // string `json:"endpoint,omitempty"`
 }
 

@@ -4,7 +4,7 @@
  * File Created: 30-08-2021 15:55:45
  * Author: Clay Risser <email@clayrisser.com>
  * -----
- * Last Modified: 30-08-2021 19:17:08
+ * Last Modified: 07-09-2021 01:14:40
  * Modified By: Clay Risser <email@clayrisser.com>
  * -----
  * BitSpur Inc. (c) Copyright 2021
@@ -62,7 +62,7 @@ export default class SocketController {
   @Post('coupled')
   async postCoupled(@Body() body: CoupledBody): Promise<void> {
     this.logger.log('socket coupled', body?.plugConfig, body?.socketConfig);
-    this.logger.log({
+    const result = await this.socketService.createClient({
       adminPassword: body.socketConfig.keycloakAdminPassword,
       adminUsername: body.socketConfig.keycloakAdminUsername,
       baseUrl: body.socketConfig.keycloakBaseUrl,
@@ -73,17 +73,23 @@ export default class SocketController {
         ? body.plugConfig.redirectUris.split(',')
         : ['*']
     });
-    await this.socketService.createClient({
-      adminPassword: body.socketConfig.keycloakAdminPassword,
-      adminUsername: body.socketConfig.keycloakAdminUsername,
-      baseUrl: body.socketConfig.keycloakBaseUrl,
-      clientId: body.plugConfig.clientId,
-      clientSecret: body.plugConfig.clientSecret,
-      realmName: body.socketConfig.keycloakRealm,
-      redirectUris: body.plugConfig.redirectUris?.length
-        ? body.plugConfig.redirectUris.split(',')
-        : ['*']
-    });
+    const replicate =
+      (body.plugConfig.replicate || '').toLowerCase() === 'false';
+    const name = body.plug.metadata?.name
+      ? `keycloak-${body.plug.metadata?.name}`
+      : '';
+    const ns = body.plug.metadata?.namespace;
+    if (replicate && name && ns) {
+      await this.socketService.applySecret(name, ns, {
+        ADMIN_PASSWORD: result.adminPassword,
+        ADMIN_USERNAME: result.adminUsername || '',
+        BASE_URL: result.baseUrl || '',
+        CLIENT_ID: result.clientId,
+        CLIENT_SECRET: result.clientSecret || '',
+        REALM_NAME: result.realmName || '',
+        REDIRECT_URIS: (result.redirectUris || []).join(',')
+      });
+    }
   }
 
   @Post('updated')
