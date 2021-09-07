@@ -3,7 +3,7 @@
 # File Created: 24-06-2021 04:03:49
 # Author: Clay Risser <email@clayrisser.com>
 # -----
-# Last Modified: 05-09-2021 19:49:19
+# Last Modified: 07-09-2021 04:24:51
 # Modified By: Clay Risser <email@clayrisser.com>
 # -----
 # Silicon Hills LLC (c) Copyright 2021
@@ -68,7 +68,7 @@ export NUMPROC ?= 1
 all: build
 
 .PHONY: build
-build:
+build: ../.dockerignore
 	@docker-compose -f docker-build.yaml build $(ARGS) main
 	@$(MAKE) -s +tag
 

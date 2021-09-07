@@ -3,7 +3,7 @@
 # File Created: 30-08-2021 15:55:45
 # Author: Clay Risser <email@clayrisser.com>
 # -----
-# Last Modified: 07-09-2021 03:16:10
+# Last Modified: 07-09-2021 03:25:02
 # Modified By: Clay Risser <email@clayrisser.com>
 # -----
 # BitSpur Inc. (c) Copyright 2021
@@ -88,9 +88,10 @@ endif
 export NUMPROC ?= 1
 # MAKEFLAGS += "-j $(NUMPROC)"
 
+export NOOUT := >$(NULL) 2>$(NULL)
 export CD ?= cd
-export GIT ?= $(shell git --version 2>$(NULL) >$(NULL) && ([ -d .git ] && echo git|| echo true)|| echo true)
-export NPM ?= $(shell pnpm --version 2>$(NULL) >$(NULL) && echo pnpm|| (yarn --version 2>$(NULL) >$(NULL) && echo yarn|| echo npm))
+export GIT ?= $(shell git --version $(NOOUT) && ([ -d .git ] && echo git|| echo true)|| echo true)
+export NPM ?= $(shell pnpm --version $(NOOUT) && echo pnpm|| (yarn --version $(NOOUT) && echo yarn|| echo npm))
 export NOFAIL := 2>$(NULL)|| true
 
 PROJECT_ROOT ?= $(shell $(GIT) rev-parse --show-superproject-working-tree)
