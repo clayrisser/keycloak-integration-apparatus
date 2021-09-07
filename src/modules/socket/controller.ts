@@ -4,7 +4,7 @@
  * File Created: 30-08-2021 15:55:45
  * Author: Clay Risser <email@clayrisser.com>
  * -----
- * Last Modified: 07-09-2021 01:14:40
+ * Last Modified: 07-09-2021 05:00:36
  * Modified By: Clay Risser <email@clayrisser.com>
  * -----
  * BitSpur Inc. (c) Copyright 2021
@@ -50,7 +50,6 @@ export default class SocketController {
         'base64'
       ).toString('utf-8')
     };
-    this.logger.log('config', config);
     return config;
   }
 
@@ -61,7 +60,6 @@ export default class SocketController {
 
   @Post('coupled')
   async postCoupled(@Body() body: CoupledBody): Promise<void> {
-    this.logger.log('socket coupled', body?.plugConfig, body?.socketConfig);
     const result = await this.socketService.createClient({
       adminPassword: body.socketConfig.keycloakAdminPassword,
       adminUsername: body.socketConfig.keycloakAdminUsername,
@@ -74,7 +72,7 @@ export default class SocketController {
         : ['*']
     });
     const replicate =
-      (body.plugConfig.replicate || '').toLowerCase() === 'false';
+      (body.plugConfig.replicate || '').toLowerCase() !== 'false';
     const name = body.plug.metadata?.name
       ? `keycloak-${body.plug.metadata?.name}`
       : '';
