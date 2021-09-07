@@ -4,7 +4,7 @@
  * File Created: 30-08-2021 18:07:12
  * Author: Clay Risser <email@clayrisser.com>
  * -----
- * Last Modified: 07-09-2021 01:08:53
+ * Last Modified: 07-09-2021 01:49:39
  * Modified By: Clay Risser <email@clayrisser.com>
  * -----
  * BitSpur Inc. (c) Copyright 2021
@@ -22,9 +22,9 @@
  * limitations under the License.
  */
 
+import * as k8s from '@kubernetes/client-node';
 import KcAdminClient from 'keycloak-admin';
 import chalk from 'chalk';
-import k8s from '@kubernetes/client-node';
 import { AxiosError } from 'axios';
 import { HttpService } from '@nestjs/axios';
 import { Logger, Injectable } from '@nestjs/common';
