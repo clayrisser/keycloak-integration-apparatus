@@ -14,10 +14,6 @@ COPY . .
 RUN make -s env && \
   make -s +generate +build
 
-RUN make -s +build
-
-RUN pwd && ls -a
-
 FROM node:14-alpine
 
 WORKDIR /opt/app

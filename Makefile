@@ -3,7 +3,7 @@
 # File Created: 30-08-2021 15:55:45
 # Author: Clay Risser <email@clayrisser.com>
 # -----
-# Last Modified: 30-08-2021 17:42:00
+# Last Modified: 07-09-2021 02:41:55
 # Modified By: Clay Risser <email@clayrisser.com>
 # -----
 # BitSpur Inc. (c) Copyright 2021
@@ -89,9 +89,11 @@ BUILD_DEPS := $(call deps,build,$(shell $(GIT) ls-files 2>$(NULL) | \
 	grep -E "\.([jt]sx?)$$"))
 BUILD_TARGET := dist/main.js
 dist/main.js:
+	@echo 1
 	@$(MAKE) -s _build
 	@rm -rf $(ACTION)/build $(NOFAIL)
 $(ACTION)/build:
+	@echo 2
 	@$(BABEL) --env-name umd src -d dist --extensions '.js,.jsx,.ts,.tsx' --source-maps
 	@$(BABEL) --env-name esm src -d es --extensions '.js,.jsx,.ts,.tsx' --source-maps
 	-@$(TSC) -p tsconfig.build.json -d --emitDeclarationOnly
