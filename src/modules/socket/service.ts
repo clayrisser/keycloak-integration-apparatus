@@ -4,7 +4,7 @@
  * File Created: 30-08-2021 18:07:12
  * Author: Clay Risser <email@clayrisser.com>
  * -----
- * Last Modified: 07-09-2021 02:35:13
+ * Last Modified: 07-09-2021 04:44:23
  * Modified By: Clay Risser <email@clayrisser.com>
  * -----
  * BitSpur Inc. (c) Copyright 2021
@@ -40,6 +40,7 @@ export default class SocketService {
 
   constructor(private readonly httpService: HttpService) {
     this.kubeConfig = new k8s.KubeConfig();
+    this.kubeConfig.loadFromDefault();
     this.coreV1Api = this.kubeConfig.makeApiClient(k8s.CoreV1Api);
   }
 
