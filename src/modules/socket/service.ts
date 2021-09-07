@@ -4,7 +4,7 @@
  * File Created: 30-08-2021 18:07:12
  * Author: Clay Risser <email@clayrisser.com>
  * -----
- * Last Modified: 07-09-2021 01:49:39
+ * Last Modified: 07-09-2021 02:35:13
  * Modified By: Clay Risser <email@clayrisser.com>
  * -----
  * BitSpur Inc. (c) Copyright 2021
@@ -179,7 +179,8 @@ export default class SocketService {
       );
       return secret;
     } catch (err) {
-      if (err.statusCode !== 404) throw err;
+      const error = err as { statusCode: number };
+      if (error.statusCode !== 404) throw err;
       const secret = (
         await this.coreV1Api.createNamespacedSecret(ns, {
           metadata: {
