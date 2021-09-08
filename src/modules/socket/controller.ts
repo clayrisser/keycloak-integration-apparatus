@@ -4,7 +4,7 @@
  * File Created: 30-08-2021 15:55:45
  * Author: Clay Risser <email@clayrisser.com>
  * -----
- * Last Modified: 07-09-2021 05:00:36
+ * Last Modified: 08-09-2021 16:52:44
  * Modified By: Clay Risser <email@clayrisser.com>
  * -----
  * BitSpur Inc. (c) Copyright 2021
@@ -60,6 +60,23 @@ export default class SocketController {
 
   @Post('coupled')
   async postCoupled(@Body() body: CoupledBody): Promise<void> {
+    const replicate =
+      (body.plugConfig.replicate || '').toLowerCase() !== 'false';
+    const name = body.plug.metadata?.name
+      ? `keycloak-${body.plug.metadata?.name}`
+      : '';
+    const ns = body.plug.metadata?.namespace;
+    if (!body.plugConfig.clientId) {
+      if (replicate && name && ns) {
+        await this.socketService.applySecret(name, ns, {
+          ADMIN_PASSWORD: body.socketConfig.keycloakAdminPassword,
+          ADMIN_USERNAME: body.socketConfig.keycloakAdminUsername,
+          BASE_URL: body.socketConfig.keycloakBaseUrl,
+          REALM_NAME: body.socketConfig.keycloakRealm || 'main'
+        });
+      }
+      return;
+    }
     const result = await this.socketService.createClient({
       adminPassword: body.socketConfig.keycloakAdminPassword,
       adminUsername: body.socketConfig.keycloakAdminUsername,
@@ -71,12 +88,6 @@ export default class SocketController {
         ? body.plugConfig.redirectUris.split(',')
         : ['*']
     });
-    const replicate =
-      (body.plugConfig.replicate || '').toLowerCase() !== 'false';
-    const name = body.plug.metadata?.name
-      ? `keycloak-${body.plug.metadata?.name}`
-      : '';
-    const ns = body.plug.metadata?.namespace;
     if (replicate && name && ns) {
       await this.socketService.applySecret(name, ns, {
         ADMIN_PASSWORD: result.adminPassword,
