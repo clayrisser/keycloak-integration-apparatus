@@ -1,12 +1,12 @@
 # File: /docker/Makefile
 # Project: example-nestjs
-# File Created: 24-06-2021 04:03:49
+# File Created: 06-12-2021 08:30:36
 # Author: Clay Risser <email@clayrisser.com>
 # -----
-# Last Modified: 30-08-2021 17:41:38
+# Last Modified: 21-01-2022 05:43:51
 # Modified By: Clay Risser <email@clayrisser.com>
 # -----
-# Silicon Hills LLC (c) Copyright 2021
+# Risser Labs LLC (c) Copyright 2021 - 2022
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -20,16 +20,17 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-NAME := $(shell node -e "console.log(require('../package.json').name)")
-REGISTRY := $(shell node -e "console.log(require('../package.json').docker.registry)")
-VERSION := $(shell node -e "console.log(require('../package.json').version)")
-IMAGE := $(REGISTRY)/$(NAME)
+include ../mkpm.mk
+ifneq (,$(MKPM_READY))
+include $(MKPM)/gnu
+include $(MKPM)/dotenv
 
-include docker.mk
+export DOCKER_COMPOSE ?= docker-compose
+export CONTEXT := ..
+export NAME := $(shell $(NODE) -e "console.log(require('../package.json').name)")
+export REGISTRY := $(shell $(NODE) -e "console.log(require('../package.json').docker.registry)")
+export VERSION := $(shell $(NODE) -e "console.log(require('../package.json').version)")
 
-.PHONY: ~%
-~%:
-	@$(MAKE) -s $(shell echo $@ | $(SED) 's/^~//g') ARGS="-d"
+-include $(MKPM)/docker
 
-.PHONY: %
-%: ;
+endif

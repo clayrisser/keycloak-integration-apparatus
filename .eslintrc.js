@@ -4,8 +4,8 @@
  * File Created: 24-06-2021 04:03:49
  * Author: Clay Risser <email@clayrisser.com>
  * -----
- * Last Modified: 22-07-2021 00:47:11
- * Modified By: Clay Risser <email@clayrisser.com>
+ * Last Modified: 16-03-2022 05:27:13
+ * Modified By: Clay Risser
  * -----
  * Silicon Hills LLC (c) Copyright 2021
  *
@@ -35,7 +35,7 @@ module.exports = {
   env: {
     browser: true
   },
-  plugins: ['spellcheck'],
+  plugins: ['spellcheck', 'import'],
   parserOptions: {
     project: './tsconfig.json',
     ecmaFeatures: {

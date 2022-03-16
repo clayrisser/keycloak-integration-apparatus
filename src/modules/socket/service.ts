@@ -4,8 +4,8 @@
  * File Created: 30-08-2021 18:07:12
  * Author: Clay Risser <email@clayrisser.com>
  * -----
- * Last Modified: 07-09-2021 04:44:23
- * Modified By: Clay Risser <email@clayrisser.com>
+ * Last Modified: 15-03-2022 12:31:30
+ * Modified By: Clay Risser
  * -----
  * BitSpur Inc. (c) Copyright 2021
  *
@@ -23,7 +23,7 @@
  */
 
 import * as k8s from '@kubernetes/client-node';
-import KcAdminClient from 'keycloak-admin';
+import KcAdminClient from '@keycloak/keycloak-admin-client';
 import chalk from 'chalk';
 import { AxiosError } from 'axios';
 import { HttpService } from '@nestjs/axios';
