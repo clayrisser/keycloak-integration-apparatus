@@ -4,8 +4,8 @@
  * File Created: 30-08-2021 15:55:45
  * Author: Clay Risser <email@clayrisser.com>
  * -----
- * Last Modified: 08-09-2021 16:52:44
- * Modified By: Clay Risser <email@clayrisser.com>
+ * Last Modified: 16-03-2022 09:52:24
+ * Modified By: Clay Risser
  * -----
  * BitSpur Inc. (c) Copyright 2021
  *
@@ -23,7 +23,7 @@
  */
 
 import { Body, Logger, Controller, Get, Post } from '@nestjs/common';
-import { HashMap, Plug, Socket } from '~/types';
+import { Plug, Socket } from '~/types';
 import SocketService from './service';
 
 @Controller('socket')
@@ -77,16 +77,61 @@ export default class SocketController {
       }
       return;
     }
+
+    const attributes = (body.plugConfig.attributes || '')
+      .split(',')
+      .reduce((attributes: Record<string, string>, attributeStr: string) => {
+        const [key, value] = Object.values({
+          ...[...new Array(2)],
+          ...attributeStr.split(':')
+        });
+        if (typeof key === 'string') attributes[key] = value;
+        return attributes;
+      }, {});
+
     const result = await this.socketService.createClient({
       adminPassword: body.socketConfig.keycloakAdminPassword,
       adminUsername: body.socketConfig.keycloakAdminUsername,
+      attributes,
       baseUrl: body.socketConfig.keycloakBaseUrl,
       clientId: body.plugConfig.clientId,
       clientSecret: body.plugConfig.clientSecret,
+      description: body.plugConfig.description,
       realmName: body.socketConfig.keycloakRealm,
-      redirectUris: body.plugConfig.redirectUris?.length
-        ? body.plugConfig.redirectUris.split(',')
-        : ['*']
+      protocol:
+        body.plugConfig.protocol?.toLowerCase() === 'saml'
+          ? 'saml'
+          : 'openid-connect',
+      ...(body.plugConfig.redirectUris
+        ? {
+            redirectUris: body.plugConfig.redirectUris.split(',')
+          }
+        : {}),
+      ...(body.plugConfig.name
+        ? {
+            name: body.plugConfig.name
+          }
+        : {}),
+      ...(body.plugConfig.directAccessGrantsEnabled
+        ? {
+            directAccessGrantsEnabled:
+              body.plugConfig.directAccessGrantsEnabled?.toLocaleLowerCase() !==
+              'false'
+          }
+        : {}),
+      ...(body.plugConfig.implicitFlowEnabled
+        ? {
+            implicitFlowEnabled:
+              body.plugConfig.implicitFlowEnabled?.toLocaleLowerCase() !==
+              'false'
+          }
+        : {}),
+      ...(body.plugConfig.consentRequired
+        ? {
+            consentRequired:
+              body.plugConfig.consentRequired?.toLowerCase() !== 'false'
+          }
+        : {})
     });
     if (replicate && name && ns) {
       await this.socketService.applySecret(name, ns, {
@@ -124,17 +169,17 @@ export interface CreatedBody {
 
 export interface CoupledBody {
   plug: Plug;
-  plugConfig: HashMap<string>;
+  plugConfig: Record<string, string>;
   socket: Socket;
-  socketConfig: HashMap<string>;
+  socketConfig: Record<string, string>;
   version: string;
 }
 
 export interface UpdatedBody {
   version: string;
   plug: Plug;
-  socketConfig: HashMap<string>;
-  plugConfig: HashMap<string>;
+  socketConfig: Record<string, string>;
+  plugConfig: Record<string, string>;
   socket: Socket;
 }
 
@@ -151,8 +196,8 @@ export interface DeletedBody {
 }
 
 export interface ConfigBody {
-  data: HashMap<string>;
+  data: Record<string, string>;
   socket: Socket;
-  vars: HashMap<string>;
+  vars: Record<string, string>;
   version: string;
 }

@@ -4,8 +4,8 @@
  * File Created: 30-08-2021 15:55:45
  * Author: Clay Risser <email@clayrisser.com>
  * -----
- * Last Modified: 30-08-2021 17:35:38
- * Modified By: Clay Risser <email@clayrisser.com>
+ * Last Modified: 16-03-2022 09:54:12
+ * Modified By: Clay Risser
  * -----
  * BitSpur Inc. (c) Copyright 2021
  *
@@ -28,7 +28,6 @@ import { ConfigService } from '@nestjs/config';
 import { NestExpressApplication } from '@nestjs/platform-express';
 import { NestFastifyApplication } from '@nestjs/platform-fastify';
 import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';
-import { HashMap } from '~/types';
 
 const rootPath = path.resolve(__dirname, '../..');
 const pkg = JSON.parse(
@@ -66,10 +65,13 @@ export function registerSwagger(
             )}/auth/realms/${configService.get(
               'KEYCLOAK_REALM'
             )}/protocol/openid-connect/auth?nonce=1`,
-            scopes: scopes.reduce((scopes: HashMap, scope: string) => {
-              scopes[scope] = true;
-              return scopes;
-            }, {})
+            scopes: scopes.reduce(
+              (scopes: Record<string, boolean>, scope: string) => {
+                scopes[scope] = true;
+                return scopes;
+              },
+              {}
+            )
           }
         }
       })

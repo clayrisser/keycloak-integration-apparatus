@@ -4,8 +4,8 @@
  * File Created: 30-08-2021 16:00:32
  * Author: Clay Risser <email@clayrisser.com>
  * -----
- * Last Modified: 07-09-2021 01:05:58
- * Modified By: Clay Risser <email@clayrisser.com>
+ * Last Modified: 16-03-2022 09:55:09
+ * Modified By: Clay Risser
  * -----
  * BitSpur Inc. (c) Copyright 2021
  *
@@ -24,7 +24,6 @@
 
 import { Var } from 'kustomize-operator';
 import k8s from '@kubernetes/client-node';
-import { HashMap } from '~/types';
 
 export interface Socket extends k8s.KubernetesObject {
   spec?: SocketSpec; // SocketSpec `json:"spec,omitempty"`
@@ -36,11 +35,11 @@ export interface Plug extends k8s.KubernetesObject {
 
 export interface PlugSpec {
   apparatus?: Apparatus; // *SpecApparatus `json:"apparatus,omitempty"`
-  config?: HashMap<string>; // map[string]string `json:"config,omitempty"`
+  config?: Record<string, string>; // map[string]string `json:"config,omitempty"`
   configConfigMapName?: string; // string `json:"configConfigMapName,omitempty"`
-  configMapper?: HashMap<string>; // map[string]string `json:"configMapper,omitempty"`
+  configMapper?: Record<string, string>; // map[string]string `json:"configMapper,omitempty"`
   configSecretName?: string; // string `json:"configSecretName,omitempty"`
-  data?: HashMap<string>; // map[string]string `json:"data,omitempty"`
+  data?: Record<string, string>; // map[string]string `json:"data,omitempty"`
   dataConfigMapName?: string; // string `json:"dataConfigMapName,omitempty"`
   dataSecretName?: string; // string `json:"dataSecretName,omitempty"`
   interface?: NamespacedName; // NamespacedName `json:"interface,omitempty"`
@@ -53,11 +52,11 @@ export interface PlugSpec {
 
 export interface SocketSpec {
   apparatus?: Apparatus; // *SpecApparatus `json:"apparatus,omitempty"`
-  config?: HashMap<string>; // map[string]string `json:"config,omitempty"`
+  config?: Record<string, string>; // map[string]string `json:"config,omitempty"`
   configConfigMapName?: string; // string `json:"configConfigMapName,omitempty"`
-  configMapper?: HashMap<string>; // map[string]string `json:"configMapper,omitempty"`
+  configMapper?: Record<string, string>; // map[string]string `json:"configMapper,omitempty"`
   configSecretName?: string; // string `json:"configSecretName,omitempty"`
-  data?: HashMap<string>; // map[string]string `json:"data,omitempty"`
+  data?: Record<string, string>; // map[string]string `json:"data,omitempty"`
   dataConfigMapName?: string; // string `json:"dataConfigMapName,omitempty"`
   dataSecretName?: string; // string `json:"dataSecretName,omitempty"`
   interface?: NamespacedName; // NamespacedName `json:"interface,omitempty"`

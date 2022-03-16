@@ -4,8 +4,8 @@
  * File Created: 30-08-2021 16:01:08
  * Author: Clay Risser <email@clayrisser.com>
  * -----
- * Last Modified: 30-08-2021 19:16:57
- * Modified By: Clay Risser <email@clayrisser.com>
+ * Last Modified: 16-03-2022 09:19:49
+ * Modified By: Clay Risser
  * -----
  * BitSpur Inc. (c) Copyright 2021
  *
@@ -25,10 +25,6 @@
 export enum Adapter {
   Express = 'express',
   Fastify = 'fastify'
-}
-
-export interface HashMap<T = any> {
-  [key: string]: T;
 }
 
 export * from './integrationOperator';

@@ -4,7 +4,7 @@
  * File Created: 30-08-2021 18:07:12
  * Author: Clay Risser <email@clayrisser.com>
  * -----
- * Last Modified: 15-03-2022 12:31:30
+ * Last Modified: 16-03-2022 09:47:41
  * Modified By: Clay Risser
  * -----
  * BitSpur Inc. (c) Copyright 2021
@@ -64,22 +64,30 @@ export default class SocketService {
     const {
       adminPassword,
       adminUsername,
+      attributes,
       authorizationServicesEnabled,
       baseUrl,
       clientId,
       clientSecret,
+      consentRequired,
+      description,
       directAccessGrantsEnabled,
       implicitFlowEnabled,
       name,
+      protocol,
       realmName,
       redirectUris,
       serviceAccountsEnabled
     }: CreateClientOptions = {
       adminUsername: 'admin',
+      attributes: {},
       authorizationServicesEnabled: true,
-      baseUrl: 'http://127.0.0.1:8080',
+      baseUrl: '/',
+      consentRequired: false,
+      description: '',
       directAccessGrantsEnabled: true,
       implicitFlowEnabled: true,
+      protocol: 'openid-connect',
       realmName: 'master',
       redirectUris: ['*'],
       serviceAccountsEnabled: true,
@@ -98,10 +106,13 @@ export default class SocketService {
     const result: CreateClientResult = {
       adminPassword,
       adminUsername,
+      attributes,
+      description,
       authorizationServicesEnabled,
       baseUrl,
       clientId,
       clientSecret,
+      consentRequired,
       directAccessGrantsEnabled,
       implicitFlowEnabled,
       name,
@@ -114,11 +125,15 @@ export default class SocketService {
       return result;
     }
     await keycloakAdmin!.clients.create({
+      attributes,
       clientId,
+      consentRequired,
+      description,
       directAccessGrantsEnabled,
+      enabled: true,
       implicitFlowEnabled,
       name: name || clientId,
-      protocol: 'openid-connect',
+      protocol,
       publicClient: !clientSecret?.length,
       redirectUris,
       ...(clientSecret?.length
@@ -301,13 +316,17 @@ export default class SocketService {
 export interface CreateClientOptions {
   adminPassword: string;
   adminUsername?: string;
+  attributes?: Record<string, string>;
   authorizationServicesEnabled?: boolean;
   baseUrl?: string;
   clientId: string;
   clientSecret?: string;
+  consentRequired?: boolean;
+  description?: string;
   directAccessGrantsEnabled?: boolean;
   implicitFlowEnabled?: boolean;
   name?: string;
+  protocol?: 'openid-connect' | 'saml';
   realmName?: string;
   redirectUris?: string[];
   serviceAccountsEnabled?: boolean;
