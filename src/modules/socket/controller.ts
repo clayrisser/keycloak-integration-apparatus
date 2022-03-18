@@ -4,7 +4,7 @@
  * File Created: 30-08-2021 15:55:45
  * Author: Clay Risser <email@clayrisser.com>
  * -----
- * Last Modified: 16-03-2022 09:52:24
+ * Last Modified: 18-03-2022 03:25:53
  * Modified By: Clay Risser
  * -----
  * BitSpur Inc. (c) Copyright 2021
@@ -77,18 +77,18 @@ export default class SocketController {
       }
       return;
     }
-
     const attributes = (body.plugConfig.attributes || '')
-      .split(',')
+      .split('\n')
       .reduce((attributes: Record<string, string>, attributeStr: string) => {
         const [key, value] = Object.values({
           ...[...new Array(2)],
           ...attributeStr.split(':')
-        });
-        if (typeof key === 'string') attributes[key] = value;
+        }) as [string, string | undefined];
+        if (typeof key === 'string' && typeof value === 'string') {
+          attributes[key] = value.trim();
+        }
         return attributes;
       }, {});
-
     const result = await this.socketService.createClient({
       adminPassword: body.socketConfig.keycloakAdminPassword,
       adminUsername: body.socketConfig.keycloakAdminUsername,
