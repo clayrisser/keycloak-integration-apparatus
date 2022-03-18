@@ -4,7 +4,7 @@
  * File Created: 30-08-2021 15:55:45
  * Author: Clay Risser <email@clayrisser.com>
  * -----
- * Last Modified: 18-03-2022 03:25:53
+ * Last Modified: 18-03-2022 03:35:50
  * Modified By: Clay Risser
  * -----
  * BitSpur Inc. (c) Copyright 2021
@@ -22,6 +22,7 @@
  * limitations under the License.
  */
 
+import YAML from 'yaml';
 import { Body, Logger, Controller, Get, Post } from '@nestjs/common';
 import { Plug, Socket } from '~/types';
 import SocketService from './service';
@@ -77,18 +78,7 @@ export default class SocketController {
       }
       return;
     }
-    const attributes = (body.plugConfig.attributes || '')
-      .split('\n')
-      .reduce((attributes: Record<string, string>, attributeStr: string) => {
-        const [key, value] = Object.values({
-          ...[...new Array(2)],
-          ...attributeStr.split(':')
-        }) as [string, string | undefined];
-        if (typeof key === 'string' && typeof value === 'string') {
-          attributes[key] = value.trim();
-        }
-        return attributes;
-      }, {});
+    const attributes = YAML.parse(body.plugConfig.attributes || '');
     const result = await this.socketService.createClient({
       adminPassword: body.socketConfig.keycloakAdminPassword,
       adminUsername: body.socketConfig.keycloakAdminUsername,
