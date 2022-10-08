@@ -1,15 +1,15 @@
 {
-  "name": "keycloak-socket",
-  "version": "0.0.2",
+  "name": "keycloak-integration-apparatus",
+  "version": "0.0.3",
   "description": "keycloak socket apparatus integration for kubernetes",
   "private": true,
   "sideEffects": false,
   "keywords": [
     "keycloak-socket"
   ],
-  "homepage": "https://gitlab.com/bitspur/community/keycloak-socket",
+  "homepage": "https://gitlab.com/risserlabs/community/keycloak-integration-apparatus",
   "bugs": {
-    "url": "https://gitlab.com/bitspur/community/keycloak-socket/issues",
+    "url": "https://gitlab.com/risserlabs/community/keycloak-integration-apparatus/issues",
     "email": "email@clayrisser.com"
   },
   "license": "Apache-2.0",
@@ -26,7 +26,7 @@
   "main": "dist/main.js",
   "repository": {
     "type": "git",
-    "url": "https://gitlab.com/bitspur/community/keycloak-socket"
+    "url": "https://gitlab.com/risserlabs/community/keycloak-integration-apparatus"
   },
   "scripts": {
     "build": "make -s build",
@@ -154,7 +154,7 @@
     "trailingComma": "none"
   },
   "docker": {
-    "registry": "registry.gitlab.com/bitspur/community"
+    "registry": "registry.gitlab.com/risserlabs/community"
   },
   "packageManager": "yarn@3.2.0"
 }

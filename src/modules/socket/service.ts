@@ -4,10 +4,10 @@
  * File Created: 30-08-2021 18:07:12
  * Author: Clay Risser <email@clayrisser.com>
  * -----
- * Last Modified: 16-03-2022 09:47:41
+ * Last Modified: 08-10-2022 03:47:15
  * Modified By: Clay Risser
  * -----
- * BitSpur Inc. (c) Copyright 2021
+ * Risser Labs LLC (c) Copyright 2021
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
