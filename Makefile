@@ -3,7 +3,7 @@
 # File Created: 15-03-2022 05:37:32
 # Author: Clay Risser
 # -----
-# Last Modified: 08-10-2022 03:41:49
+# Last Modified: 08-10-2022 03:55:20
 # Modified By: Clay Risser
 # -----
 # Risser Labs LLC (c) Copyright 2021 - 2022
@@ -112,9 +112,9 @@ pack: build
 +pack:
 	@$(NPM) pack
 
-.PHONY: docker-%
-docker-%:
-	@$(MAKE) -sC docker $(subst docker-,,$@) ARGS=$(ARGS)
+.PHONY: docker/%
+docker/%:
+	@$(MAKE) -sC docker $(subst docker/,,$@) ARGS=$(ARGS)
 
 .PHONY: clean
 clean: docker-down ##
