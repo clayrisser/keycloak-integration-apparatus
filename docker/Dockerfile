@@ -9,18 +9,22 @@ RUN apt-get update && apt-get install -y \
   make \
   python
 
-COPY .yarn ./.yarn
-COPY package*.json yarn.lock .yarnrc* *.mk Makefile ./
+COPY .yarn .yarn
+COPY .git .git
+COPY .mkpm/.bootstrap.mk .mkpm/.cache.tar.gz .mkpm/
+COPY package.json yarn.lock .yarnrc* *.mk Makefile .gitattributes ./
 RUN make -s +install
 COPY . .
 RUN make -s +build
 
-FROM node:16-alpine
+FROM node:16-bullseye
 
 WORKDIR /opt/app
 
-RUN apk add --no-cache \
-  tini
+RUN apt-get update && apt-get install -y \
+  tini && \
+  rm -rf /var/lib/apt/lists/*
+
 
 COPY docker/entrypoint.sh /usr/local/sbin/entrypoint
 RUN chmod +x /usr/local/sbin/entrypoint
