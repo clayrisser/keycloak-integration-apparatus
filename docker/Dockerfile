@@ -25,7 +25,6 @@ RUN apt-get update && apt-get install -y \
   tini && \
   rm -rf /var/lib/apt/lists/*
 
-
 COPY docker/entrypoint.sh /usr/local/sbin/entrypoint
 RUN chmod +x /usr/local/sbin/entrypoint
 
