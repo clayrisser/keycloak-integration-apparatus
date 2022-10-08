@@ -4,7 +4,7 @@
  * File Created: 30-08-2021 15:55:45
  * Author: Clay Risser <email@clayrisser.com>
  * -----
- * Last Modified: 08-10-2022 03:47:14
+ * Last Modified: 08-10-2022 03:51:20
  * Modified By: Clay Risser
  * -----
  * Risser Labs LLC (c) Copyright 2021
@@ -49,13 +49,13 @@ export async function start() {
   await p;
 }
 
-export async function stop() {
+export async function stopServer() {
   if (!app) return;
   await app.close();
 }
 
 export async function restart() {
-  await stop();
+  await stopServer();
   await start();
 }
 
