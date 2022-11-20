@@ -4,7 +4,7 @@
  * File Created: 16-10-2022 05:08:44
  * Author: Clay Risser
  * -----
- * Last Modified: 20-11-2022 07:17:34
+ * Last Modified: 20-11-2022 09:49:35
  * Modified By: Clay Risser
  * -----
  * Risser Labs LLC (c) Copyright 2021 - 2022
@@ -41,7 +41,7 @@ module.exports = {
   },
   rules: {
     'max-lines': ['error', 500],
-    'max-lines-per-function': ['warn', 99],
+    'max-lines-per-function': ['warn', 200],
     '@typescript-eslint/lines-between-class-members': ['error', 'always', { exceptAfterSingleLine: true }],
     'no-empty-function': ['warn', { allow: ['constructors'] }],
     '@typescript-eslint/no-unused-vars': [

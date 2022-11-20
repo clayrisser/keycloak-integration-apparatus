@@ -4,7 +4,7 @@
  * File Created: 30-08-2021 15:55:45
  * Author: Clay Risser <email@clayrisser.com>
  * -----
- * Last Modified: 20-11-2022 07:40:02
+ * Last Modified: 20-11-2022 10:11:04
  * Modified By: Clay Risser
  * -----
  * Risser Labs LLC (c) Copyright 2021
@@ -74,7 +74,7 @@ export class SocketController {
       return;
     }
     const attributes = YAML.parse(body.plugConfig.attributes || '');
-    const result = await this.socketService.createClient({
+    const result = await this.socketService.createOrUpdateClient({
       adminPassword: body.socketConfig.keycloakAdminPassword,
       adminUsername: body.socketConfig.keycloakAdminUsername,
       attributes,
@@ -129,8 +129,16 @@ export class SocketController {
   }
 
   @Post('decoupled')
-  async postDecoupled(@Body() _body: DecoupledBody): Promise<void> {
-    this.logger.log('socket decoupled');
+  async postDecoupled(@Body() body: DecoupledBody): Promise<void> {
+    if (body.plugConfig.cleanup?.toLowerCase() === 'true' || body.plugConfig.cleanup === '1') {
+      return this.socketService.removeClient({
+        adminPassword: body.socketConfig.keycloakAdminPassword,
+        adminUsername: body.socketConfig.keycloakAdminUsername,
+        baseUrl: body.socketConfig.keycloakBaseUrl,
+        clientId: body.plugConfig.clientId,
+        realmName: body.socketConfig.keycloakRealm,
+      });
+    }
   }
 
   @Post('deleted')

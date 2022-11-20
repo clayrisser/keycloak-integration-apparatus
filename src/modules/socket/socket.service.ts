@@ -4,7 +4,7 @@
  * File Created: 30-08-2021 18:07:12
  * Author: Clay Risser <email@clayrisser.com>
  * -----
- * Last Modified: 20-11-2022 07:23:06
+ * Last Modified: 20-11-2022 09:58:57
  * Modified By: Clay Risser
  * -----
  * Risser Labs LLC (c) Copyright 2021
@@ -57,7 +57,7 @@ export class SocketService {
     return;
   }
 
-  async createClient(options: CreateClientOptions): Promise<CreateClientResult> {
+  async createOrUpdateClient(options: CreateClientOptions): Promise<CreateClientResult> {
     const {
       adminPassword,
       adminUsername,
@@ -118,9 +118,36 @@ export class SocketService {
       serviceAccountsEnabled,
     };
     if (client) {
-      this.logger.log(`client ${clientId} already exists`);
+      this.logger.log(`updating client ${clientId}`);
+      await keycloakAdmin!.clients.update(
+        {
+          id: clientId,
+        },
+        {
+          attributes,
+          clientId,
+          consentRequired,
+          description,
+          directAccessGrantsEnabled,
+          enabled: true,
+          implicitFlowEnabled,
+          name: name || clientId,
+          protocol,
+          publicClient: !clientSecret?.length,
+          redirectUris,
+          ...(clientSecret?.length
+            ? {
+                authorizationServicesEnabled,
+                secret: clientSecret,
+                serviceAccountsEnabled,
+              }
+            : {}),
+        },
+      );
+      this.logger.log(`updated client ${clientId}`);
       return result;
     }
+    this.logger.log(`creating client ${clientId}`);
     await keycloakAdmin!.clients.create({
       attributes,
       clientId,
@@ -143,6 +170,30 @@ export class SocketService {
     });
     this.logger.log(`created client ${clientId}`);
     return result;
+  }
+
+  async removeClient(options: RemoveClientOptions) {
+    const { adminPassword, adminUsername, baseUrl, clientId, realmName }: CreateClientOptions = {
+      adminUsername: 'admin',
+      baseUrl: '/',
+      realmName: 'master',
+      ...options,
+    };
+    await this.ready(baseUrl);
+    const keycloakAdmin = new KcAdminClient({ baseUrl: `${baseUrl}/auth` });
+    await keycloakAdmin.auth({
+      clientId: 'admin-cli',
+      grantType: 'password',
+      password: adminPassword,
+      username: adminUsername,
+    });
+    keycloakAdmin.setConfig({ realmName });
+    const client = (await keycloakAdmin!.clients.find({ clientId }))?.[0];
+    if (client) {
+      this.logger.log(`removing client ${clientId}`);
+      await keycloakAdmin!.clients.del({ id: clientId });
+      this.logger.log(`removed client ${clientId}`);
+    }
   }
 
   async applySecret(
@@ -315,3 +366,11 @@ export interface CreateClientOptions {
 }
 
 export type CreateClientResult = CreateClientOptions;
+
+export interface RemoveClientOptions {
+  adminPassword: string;
+  adminUsername?: string;
+  baseUrl?: string;
+  clientId: string;
+  realmName?: string;
+}

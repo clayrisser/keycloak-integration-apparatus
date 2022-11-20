@@ -4,7 +4,7 @@
  * File Created: 20-11-2022 07:22:58
  * Author: Clay Risser
  * -----
- * Last Modified: 20-11-2022 07:24:30
+ * Last Modified: 20-11-2022 10:05:58
  * Modified By: Clay Risser
  * -----
  * Risser Labs LLC (c) Copyright 2021 - 2022
@@ -38,16 +38,18 @@ export class CoupledBody {
 }
 
 export class UpdatedBody {
-  version: string;
   plug: Plug;
-  socketConfig: Record<string, string>;
   plugConfig: Record<string, string>;
   socket: Socket;
+  socketConfig: Record<string, string>;
+  version: string;
 }
 
 export class DecoupledBody {
   plug: Plug;
+  plugConfig: Record<string, string>;
   socket: Socket;
+  socketConfig: Record<string, string>;
   version: string;
 }
 

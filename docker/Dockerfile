@@ -30,7 +30,7 @@ RUN chmod +x /usr/local/sbin/entrypoint
 ENTRYPOINT [ "/usr/local/sbin/entrypoint" ]
 
 EXPOSE 3100
-EXPOSE 5000
+EXPOSE 3000
 
 ENV CONTAINER=1 \
     DEBUG=0 \
@@ -41,5 +41,5 @@ ENV CONTAINER=1 \
     LOG_FILE_NAME= \
     LOG_LEVELS=error,warn,log \
     METRICS_PORT=3100 \
-    PORT=5000 \
+    PORT=3000 \
     SWAGGER=0

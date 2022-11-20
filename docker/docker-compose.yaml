@@ -19,7 +19,7 @@ services:
     network_mode: 'host'
     ports:
       - 3100:3100
-      - 5000:5000
+      - 3000:3000
     volumes:
       - ./data/logs:/var/logs
     environment:
