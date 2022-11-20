@@ -1,13 +1,13 @@
 /**
  * File: /src/main.ts
- * Project: keycloak-socket
- * File Created: 30-08-2021 15:55:45
- * Author: Clay Risser <email@clayrisser.com>
+ * Project: app
+ * File Created: 22-10-2022 06:38:15
+ * Author: Clay Risser
  * -----
- * Last Modified: 08-10-2022 03:47:14
+ * Last Modified: 20-11-2022 07:01:14
  * Modified By: Clay Risser
  * -----
- * Risser Labs LLC (c) Copyright 2021
+ * Risser Labs LLC (c) Copyright 2021 - 2022
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -23,8 +23,10 @@
  */
 
 import 'reflect-metadata';
-import { start } from '~/bootstrap';
+import otelSDK from 'app/tracing';
+import { start } from 'app/bootstrap';
 
 (async () => {
+  await otelSDK.start();
   await start();
 })();

@@ -24,7 +24,7 @@
 
 export enum Adapter {
   Express = 'express',
-  Fastify = 'fastify'
+  Fastify = 'fastify',
 }
 
 export * from './integrationOperator';

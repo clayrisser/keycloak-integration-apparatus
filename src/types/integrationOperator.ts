@@ -84,7 +84,7 @@ export interface Resource {
 
 export enum Do {
   Apply = 'apply',
-  Delete = 'delete'
+  Delete = 'delete',
 }
 
 export enum When {
@@ -93,5 +93,5 @@ export enum When {
   Created = 'created',
   Decoupled = 'decoupled',
   Deleted = 'deleted',
-  Updated = 'updated'
+  Updated = 'updated',
 }

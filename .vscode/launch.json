@@ -1,0 +1,16 @@
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "name": "start",
+      "type": "node-terminal",
+      "request": "launch",
+      "command": "$(remake --version 2>/dev/null >/dev/null && echo remake || echo make) start",
+      "serverReadyAction": {
+        "pattern": "listening on port ([0-9]+)",
+        "uriFormat": "http://localhost:%s/docs",
+        "action": "openExternally"
+      }
+    }
+  ]
+}

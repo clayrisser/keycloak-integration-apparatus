@@ -1,40 +1,45 @@
-FROM node:16-bullseye AS builder
+FROM registry.gitlab.com/risserlabs/community/images/node:16.14.2 AS builder
 
 WORKDIR /code
 
-RUN apt-get update && apt-get install -y \
-  build-essential \
-  git \
-  git-lfs \
-  make \
-  python
+RUN curl -Lo /usr/bin/yq https://github.com/mikefarah/yq/releases/download/v4.25.1/yq_linux_amd64 && \
+    chmod +x /usr/bin/yq
 
+COPY package.json .yarnrc.yml yarn.lock *.mk default.env Makefile ./
+COPY .mkpm/.bootstrap.mk .mkpm/.cache.tar.gz .mkpm/
 COPY .yarn .yarn
 COPY .git .git
-COPY .mkpm/.bootstrap.mk .mkpm/.cache.tar.gz .mkpm/
-COPY package.json yarn.lock .yarnrc* *.mk Makefile .gitattributes ./
 RUN make -s +install
 COPY . .
 RUN make -s +build
+RUN yarn workspaces focus --production
+RUN mkdir -p /tmp/app && \
+    mv dist \
+    node_modules \
+    package.json \
+    .env /tmp/app
 
-FROM node:16-bullseye
+FROM node:16-alpine
 
 WORKDIR /opt/app
 
-RUN apt-get update && apt-get install -y \
-  tini && \
-  rm -rf /var/lib/apt/lists/*
-
+COPY --from=builder /tmp/app ./
 COPY docker/entrypoint.sh /usr/local/sbin/entrypoint
 RUN chmod +x /usr/local/sbin/entrypoint
 
-COPY --from=builder /code/.env /code/package.json ./
-COPY --from=builder /code/dist ./dist
-COPY --from=builder /code/node_modules ./node_modules
+ENTRYPOINT [ "/usr/local/sbin/entrypoint" ]
 
-ENTRYPOINT [ "/sbin/tini", "--", "/usr/local/sbin/entrypoint" ]
+EXPOSE 3100
+EXPOSE 5000
 
-EXPOSE 3000
-
-ENV DEBUG=0 \
-  SWAGGER=0
+ENV CONTAINER=1 \
+    DEBUG=0 \
+    KEYCLOAK_ADMIN_PASSWORD= \
+    KEYCLOAK_BASE_URL=http://keycloak:8080 \
+    KEYCLOAK_CLIENT_ID= \
+    KEYCLOAK_CLIENT_SECRET= \
+    LOG_FILE_NAME= \
+    LOG_LEVELS=error,warn,log \
+    METRICS_PORT=3100 \
+    PORT=5000 \
+    SWAGGER=0

@@ -1,13 +1,13 @@
 /**
  * File: /src/bootstrap/index.ts
- * Project: keycloak-socket
- * File Created: 30-08-2021 15:55:45
- * Author: Clay Risser <email@clayrisser.com>
+ * Project: keycloak-integration-apparatus
+ * File Created: 20-11-2022 06:56:06
+ * Author: Clay Risser
  * -----
- * Last Modified: 08-10-2022 03:51:20
+ * Last Modified: 20-11-2022 07:43:58
  * Modified By: Clay Risser
  * -----
- * Risser Labs LLC (c) Copyright 2021
+ * Risser Labs LLC (c) Copyright 2021 - 2022
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -22,60 +22,7 @@
  * limitations under the License.
  */
 
-import path from 'path';
-import dotenv from 'dotenv';
-import { NestExpressApplication } from '@nestjs/platform-express';
-import { NestFastifyApplication } from '@nestjs/platform-fastify';
-import { Adapter } from '~/types';
-import {
-  appListen,
-  createApp,
-  registerEjs,
-  registerSwagger
-} from '~/bootstrap';
-
-dotenv.config({ path: path.resolve(__dirname, '../../.env') });
-
-const adapter = Adapter.Express;
-let bootstrappedEvents: BootstrapEvent[] = [];
-let app: NestExpressApplication | NestFastifyApplication;
-
-export async function start() {
-  app = await createApp(adapter);
-  await registerEjs(app);
-  registerSwagger(app);
-  const p = appListen(app);
-  await emitBootstrapped(app);
-  await p;
-}
-
-export async function stopServer() {
-  if (!app) return;
-  await app.close();
-}
-
-export async function restart() {
-  await stopServer();
-  await start();
-}
-
-export function onBootstrapped(cb: (...args: any[]) => any) {
-  bootstrappedEvents.push(cb);
-}
-
-async function emitBootstrapped(
-  app: NestExpressApplication | NestFastifyApplication
-) {
-  const clonedBootstrappedEvents = [...bootstrappedEvents];
-  bootstrappedEvents = [];
-  await new Promise((r) => setTimeout(r, 1000, null));
-  clonedBootstrappedEvents.forEach((event: BootstrapEvent) => event(app));
-}
-
 export * from './app';
-export * from './ejs';
+export * from './logger';
+export * from './miscellaneous';
 export * from './swagger';
-
-export type BootstrapEvent = (
-  app: NestExpressApplication | NestFastifyApplication
-) => any;

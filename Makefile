@@ -1,9 +1,9 @@
 # File: /Makefile
-# Project: keycloak-socket
-# File Created: 15-03-2022 05:37:32
-# Author: Clay Risser
+# Project: example-nestjs
+# File Created: 06-12-2021 23:43:39
+# Author: Clay Risser <email@clayrisser.com>
 # -----
-# Last Modified: 08-10-2022 03:55:20
+# Last Modified: 20-11-2022 07:10:30
 # Modified By: Clay Risser
 # -----
 # Risser Labs LLC (c) Copyright 2021 - 2022
@@ -27,20 +27,15 @@ include $(MKPM)/mkchain
 include $(MKPM)/yarn
 include $(MKPM)/envcache
 include $(MKPM)/dotenv
-
-export BABEL ?= $(call yarn_binary,babel)
-export BABEL_NODE ?= $(call yarn_binary,babel-node)
-export CLOC ?= cloc
-export CSPELL ?= $(call yarn_binary,cspell)
-export ESLINT ?= $(call yarn_binary,eslint)
-export JEST ?= $(call yarn_binary,jest)
-export NODEMON ?= $(call yarn_binary,nodemon)
-export PRETTIER ?= $(call yarn_binary,prettier)
-export TSC ?= $(call yarn_binary,tsc)
+include $(PROJECT_ROOT)/shared.mk
 
 ACTIONS += install
-$(ACTION)/install: package.json
-	@$(YARN) install $(ARGS)
+$(ACTION)/install: $(PROJECT_ROOT)/package.json package.json
+ifneq (,$(SUBPROC))
+	@$(MAKE) -C $(PROJECT_ROOT) \~install ARGS=$(ARGS)
+else
+	@$(YARN) workspaces focus $(ARGS)
+endif
 	@$(call done,install)
 
 ACTIONS += format~install ##
@@ -53,31 +48,34 @@ $(ACTION)/spellcheck: $(call git_deps,\.(md)$$)
 	-@$(call cspell,$?,$(ARGS))
 	@$(call done,spellcheck)
 
-ACTIONS += lint~spellcheck ##
+ACTIONS += generate~spellcheck ##
+$(ACTION)/generate: $(call git_deps,\.([jt]sx?)$$)
+	@$(MKDIR) -p docker/data/logs
+	@$(TOUCH) docker/data/logs/app.log
+	@$(call done,generate)
+src/generated/type-graphql/index.ts:
+	@$(call reset,generate)
+
+ACTIONS += lint~generate ##
 $(ACTION)/lint: $(call git_deps,\.([jt]sx?)$$)
 	-@$(call eslint,$?,$(ARGS))
+	-@$(TSC) -p tsconfig.build.json --noEmit
 	@$(call done,lint)
 
 ACTIONS += test~lint ##
 $(ACTION)/test: $(call git_deps,\.([jt]sx?)$$)
-	@$(MKDIR) -p node_modules/.tmp
 	-@$(call jest,$?,$(ARGS))
 	@$(call done,test)
 
 ACTIONS += build~test ##
-BUILD_TARGET := dist/main.js
-dist/main.js:
-	@$(call reset,build)
 $(ACTION)/build: $(call git_deps,\.([jt]sx?)$$)
-	@$(BABEL) --env-name umd src -d dist --extensions '.js,.jsx,.ts,.tsx' --source-maps
-	@$(BABEL) --env-name esm src -d es --extensions '.js,.jsx,.ts,.tsx' --source-maps
-	@$(TSC) -p tsconfig.build.json -d
+	@$(NEST) build --webpack
 	@$(call done,build)
 
 .PHONY: start +start
-start: | ~install +start ##
+start: | ~install +generate docker/dev-d +start ##
 +start:
-	@$(NODEMON) --exec $(BABEL_NODE) --extensions .ts src/main.ts $(ARGS)
+	@$(NODEMON) --exec "$(NEST) start --webpack $(ARGS)"
 
 COLLECT_COVERAGE_FROM := ["src/**/*.{js,jsx,ts,tsx}"]
 .PHONY: coverage +coverage
@@ -96,28 +94,22 @@ upgrade:
 inc:
 	@$(NPM) version patch --git=false $(NOFAIL)
 
+.PHONY: get-misspelled
+get-misspelled:
+	@$(MAKE) +lint | $(GREP) -oE 'You have a misspelled word: [^ ]+' | \
+		$(SED) 's|.\+: ||g' | $(TR) '[:upper:]' '[:lower:]' | \
+		$(SORT) | $(UNIQ) | $(SED) 's|\(.*\)|"\1",|g'
+
 .PHONY: count
 count:
 	@$(CLOC) $(shell $(GIT) ls-files)
-
-.PHONY: publish +publish
-publish: build
-	@$(MAKE) -s +publish
-+publish:
-	@$(NPM) publish
-
-.PHONY: pack +pack
-pack: build
-	@$(MAKE) -s +pack
-+pack:
-	@$(NPM) pack
 
 .PHONY: docker/%
 docker/%:
 	@$(MAKE) -sC docker $(subst docker/,,$@) ARGS=$(ARGS)
 
 .PHONY: clean
-clean: docker-down ##
+clean: docker/down ##
 	-@$(MKCACHE_CLEAN)
 	-@$(JEST) --clearCache $(NOFAIL)
 	-@$(GIT) clean -fXd \
@@ -126,15 +118,5 @@ clean: docker-down ##
 		$(NOFAIL)
 
 -include $(call actions)
-
-CACHE_ENVS += \
-	BABEL \
-	BABEL_NODE \
-	CLOC \
-	CSPELL \
-	ESLINT \
-	JEST \
-	PRETTIER \
-	TSC
 
 endif

@@ -4,7 +4,7 @@
  * File Created: 30-08-2021 15:55:45
  * Author: Clay Risser <email@clayrisser.com>
  * -----
- * Last Modified: 08-10-2022 03:47:15
+ * Last Modified: 20-11-2022 07:25:38
  * Modified By: Clay Risser
  * -----
  * Risser Labs LLC (c) Copyright 2021
@@ -24,14 +24,14 @@
 
 import { Module } from '@nestjs/common';
 import { HttpModule } from '@nestjs/axios';
-import SocketController from './controller';
-import SocketService from './service';
+import { SocketController } from './socket.controller';
+import { SocketService } from './socket.service';
 
 @Module({
   controllers: [SocketController],
   exports: [SocketService],
   imports: [HttpModule],
-  providers: [SocketService]
+  providers: [SocketService],
 })
 export default class SocketModule {}
 

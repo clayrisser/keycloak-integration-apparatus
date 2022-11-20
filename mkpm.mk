@@ -1,9 +1,9 @@
 # File: /mkpm.mk
-# Project: keycloak-socket
-# File Created: 08-10-2022 03:39:28
+# Project: example-nestjs
+# File Created: 15-10-2022 01:16:21
 # Author: Clay Risser
 # -----
-# Last Modified: 08-10-2022 03:40:36
+# Last Modified: 20-11-2022 07:41:11
 # Modified By: Clay Risser
 # -----
 # Risser Labs LLC (c) Copyright 2021 - 2022
@@ -21,12 +21,12 @@
 # limitations under the License.
 
 export MKPM_PACKAGES_DEFAULT := \
-	yarn=0.0.5 \
-	mkchain=0.1.0 \
-	gnu=0.0.3 \
+	docker=0.0.17 \
+	dotenv=0.0.11 \
 	envcache=0.1.0 \
-	dotenv=0.0.9 \
-	docker=0.0.16
+	gnu=0.0.3 \
+	mkchain=0.1.0 \
+	yarn=0.0.5
 
 export MKPM_REPO_DEFAULT := \
 	https://gitlab.com/risserlabs/community/mkpm-stable.git
