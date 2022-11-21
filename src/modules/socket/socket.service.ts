@@ -4,7 +4,7 @@
  * File Created: 30-08-2021 18:07:12
  * Author: Clay Risser <email@clayrisser.com>
  * -----
- * Last Modified: 20-11-2022 09:58:57
+ * Last Modified: 21-11-2022 04:58:35
  * Modified By: Clay Risser
  * -----
  * Risser Labs LLC (c) Copyright 2021
@@ -46,7 +46,7 @@ export class SocketService {
 
   async ready(baseUrl: string, timeout = 1000 * 60 * 5, retry = 5000): Promise<undefined> {
     try {
-      await firstValueFrom(this.httpService.get(`${baseUrl}/auth`));
+      await firstValueFrom(this.httpService.get(baseUrl));
     } catch (err) {
       if (timeout < 0) throw err;
       const error = err as AxiosError;
@@ -91,7 +91,7 @@ export class SocketService {
       ...options,
     };
     await this.ready(baseUrl);
-    const keycloakAdmin = new KcAdminClient({ baseUrl: `${baseUrl}/auth` });
+    const keycloakAdmin = new KcAdminClient({ baseUrl });
     await keycloakAdmin.auth({
       clientId: 'admin-cli',
       grantType: 'password',
@@ -180,7 +180,7 @@ export class SocketService {
       ...options,
     };
     await this.ready(baseUrl);
-    const keycloakAdmin = new KcAdminClient({ baseUrl: `${baseUrl}/auth` });
+    const keycloakAdmin = new KcAdminClient({ baseUrl });
     await keycloakAdmin.auth({
       clientId: 'admin-cli',
       grantType: 'password',
