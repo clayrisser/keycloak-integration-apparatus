@@ -4,7 +4,7 @@
  * File Created: 30-08-2021 18:07:12
  * Author: Clay Risser <email@clayrisser.com>
  * -----
- * Last Modified: 21-11-2022 04:58:35
+ * Last Modified: 29-11-2022 11:48:34
  * Modified By: Clay Risser
  * -----
  * Risser Labs LLC (c) Copyright 2021
@@ -118,33 +118,33 @@ export class SocketService {
       serviceAccountsEnabled,
     };
     if (client) {
-      this.logger.log(`updating client ${clientId}`);
-      await keycloakAdmin!.clients.update(
-        {
-          id: clientId,
-        },
-        {
-          attributes,
-          clientId,
-          consentRequired,
-          description,
-          directAccessGrantsEnabled,
-          enabled: true,
-          implicitFlowEnabled,
-          name: name || clientId,
-          protocol,
-          publicClient: !clientSecret?.length,
-          redirectUris,
-          ...(clientSecret?.length
-            ? {
-                authorizationServicesEnabled,
-                secret: clientSecret,
-                serviceAccountsEnabled,
-              }
-            : {}),
-        },
-      );
-      this.logger.log(`updated client ${clientId}`);
+      // this.logger.log(`updating client ${clientId}`);
+      // await keycloakAdmin!.clients.update(
+      //   {
+      //     id: clientId,
+      //   },
+      //   {
+      //     attributes,
+      //     clientId,
+      //     consentRequired,
+      //     description,
+      //     directAccessGrantsEnabled,
+      //     enabled: true,
+      //     implicitFlowEnabled,
+      //     name: name || clientId,
+      //     protocol,
+      //     publicClient: !clientSecret?.length,
+      //     redirectUris,
+      //     ...(clientSecret?.length
+      //       ? {
+      //           authorizationServicesEnabled,
+      //           secret: clientSecret,
+      //           serviceAccountsEnabled,
+      //         }
+      //       : {}),
+      //   },
+      // );
+      // this.logger.log(`updated client ${clientId}`);
       return result;
     }
     this.logger.log(`creating client ${clientId}`);
