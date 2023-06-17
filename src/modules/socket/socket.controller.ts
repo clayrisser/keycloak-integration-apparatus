@@ -4,7 +4,7 @@
  * File Created: 30-08-2021 15:55:45
  * Author: Clay Risser <email@clayrisser.com>
  * -----
- * Last Modified: 17-06-2023 14:41:40
+ * Last Modified: 17-06-2023 17:09:09
  * Modified By: Clay Risser
  * -----
  * Risser Labs LLC (c) Copyright 2021
@@ -41,6 +41,7 @@ export class SocketController {
   @Post('config')
   async postConfig(@Body() _body: ConfigBody) {
     this.logger.log('socket config');
+    return {};
   }
 
   @Post('created')
