@@ -4,7 +4,7 @@
  * File Created: 22-10-2022 06:38:15
  * Author: Clay Risser
  * -----
- * Last Modified: 20-11-2022 07:25:57
+ * Last Modified: 17-06-2023 17:21:37
  * Modified By: Clay Risser
  * -----
  * Risser Labs LLC (c) Copyright 2021 - 2022
@@ -42,7 +42,9 @@ const otelSDK = new NodeSDK({
   metricReader: new PrometheusExporter({
     port: Number(env.METRICS_PORT || 3100),
   }),
-  spanProcessor: new BatchSpanProcessor(new JaegerExporter()) as any,
+  ...(env.OTEL_EXPORTER_JAEGER_ENDPOINT?.length
+    ? { spanProcessor: new BatchSpanProcessor(new JaegerExporter()) as any }
+    : {}),
   contextManager: new AsyncLocalStorageContextManager(),
   textMapPropagator: new CompositePropagator({
     propagators: [
