@@ -4,7 +4,7 @@
  * File Created: 22-10-2022 06:38:15
  * Author: Clay Risser
  * -----
- * Last Modified: 20-11-2022 07:01:13
+ * Last Modified: 17-06-2023 14:28:28
  * Modified By: Clay Risser
  * -----
  * Risser Labs LLC (c) Copyright 2021 - 2022
@@ -31,16 +31,10 @@ import { Module, Global, DynamicModule } from '@nestjs/common';
 import { OpenTelemetryModule } from 'nestjs-otel';
 import { TerminusModule } from '@nestjs/terminus';
 
-const { env } = process;
-
 @Global()
 @Module({})
 export class AppModule {
-  public static register(config: RegisterAppModuleConfig): DynamicModule {
-    const { registerKeycloak } = {
-      registerKeycloak: false,
-      ...config,
-    };
+  public static register(_: RegisterAppModuleConfig): DynamicModule {
     return {
       global: true,
       module: AppModule,

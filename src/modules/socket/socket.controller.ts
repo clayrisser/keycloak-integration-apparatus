@@ -4,7 +4,7 @@
  * File Created: 30-08-2021 15:55:45
  * Author: Clay Risser <email@clayrisser.com>
  * -----
- * Last Modified: 20-11-2022 10:11:04
+ * Last Modified: 17-06-2023 14:41:40
  * Modified By: Clay Risser
  * -----
  * Risser Labs LLC (c) Copyright 2021
@@ -39,17 +39,8 @@ export class SocketController {
   }
 
   @Post('config')
-  async postConfig(@Body() body: ConfigBody) {
+  async postConfig(@Body() _body: ConfigBody) {
     this.logger.log('socket config');
-    const config = {
-      keycloakAdminPassword: Buffer.from(body.vars?.BASE64_ENCODED_KEYCLOAK_ADMIN_PASSWORD || '', 'base64').toString(
-        'utf-8',
-      ),
-      keycloakAdminUsername: Buffer.from(body.vars?.BASE64_ENCODED_KEYCLOAK_ADMIN_USERNAME || '', 'base64').toString(
-        'utf-8',
-      ),
-    };
-    return config;
   }
 
   @Post('created')
@@ -66,9 +57,9 @@ export class SocketController {
       if (replicate && name && ns) {
         await this.socketService.applySecret(name, ns, {
           ADMIN_PASSWORD: body.socketConfig.keycloakAdminPassword,
-          ADMIN_USERNAME: body.socketConfig.keycloakAdminUsername,
+          ADMIN_USERNAME: body.socketConfig.keycloakAdminUsername || 'admin',
           BASE_URL: body.socketConfig.keycloakBaseUrl,
-          REALM_NAME: body.socketConfig.keycloakRealm || 'main',
+          REALM_NAME: body.plugConfig.realm || body.socketConfig.defaultRealm || 'main',
         });
       }
       return;
@@ -82,7 +73,7 @@ export class SocketController {
       clientId: body.plugConfig.clientId,
       clientSecret: body.plugConfig.clientSecret,
       description: body.plugConfig.description,
-      realmName: body.socketConfig.keycloakRealm,
+      realmName: body.plugConfig.realm || body.socketConfig.defaultRealm || 'main',
       protocol: body.plugConfig.protocol?.toLowerCase() === 'saml' ? 'saml' : 'openid-connect',
       ...(body.plugConfig.redirectUris
         ? {
@@ -136,7 +127,7 @@ export class SocketController {
         adminUsername: body.socketConfig.keycloakAdminUsername,
         baseUrl: body.socketConfig.keycloakBaseUrl,
         clientId: body.plugConfig.clientId,
-        realmName: body.socketConfig.keycloakRealm,
+        realmName: body.plugConfig.realm || body.socketConfig.defaultRealm || 'main',
       });
     }
   }

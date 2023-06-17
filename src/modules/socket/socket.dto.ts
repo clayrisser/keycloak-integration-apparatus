@@ -4,7 +4,7 @@
  * File Created: 20-11-2022 07:22:58
  * Author: Clay Risser
  * -----
- * Last Modified: 20-11-2022 10:05:58
+ * Last Modified: 17-06-2023 14:36:21
  * Modified By: Clay Risser
  * -----
  * Risser Labs LLC (c) Copyright 2021 - 2022
@@ -31,25 +31,25 @@ export class CreatedBody {
 
 export class CoupledBody {
   plug: Plug;
-  plugConfig: Record<string, string>;
+  plugConfig: PlugConfig;
   socket: Socket;
-  socketConfig: Record<string, string>;
+  socketConfig: SocketConfig;
   version: string;
 }
 
 export class UpdatedBody {
   plug: Plug;
-  plugConfig: Record<string, string>;
+  plugConfig: PlugConfig;
   socket: Socket;
-  socketConfig: Record<string, string>;
+  socketConfig: SocketConfig;
   version: string;
 }
 
 export class DecoupledBody {
   plug: Plug;
-  plugConfig: Record<string, string>;
+  plugConfig: PlugConfig;
   socket: Socket;
-  socketConfig: Record<string, string>;
+  socketConfig: SocketConfig;
   version: string;
 }
 
@@ -64,4 +64,27 @@ export class ConfigBody {
   socket: Socket;
   vars: Record<string, string>;
   version: string;
+}
+
+export class PlugConfig {
+  clientId: string;
+  attributes?: string;
+  cleanup?: string;
+  clientSecret?: string;
+  consentRequired?: string;
+  description?: string;
+  directAccessGrantsEnabled?: string;
+  implicitFlowEnabled?: string;
+  name?: string;
+  protocol?: string;
+  realm?: string;
+  redirectUris?: string;
+  replicate?: string;
+}
+
+export class SocketConfig {
+  keycloakAdminPassword: string;
+  keycloakBaseUrl: string;
+  defaultRealm: string;
+  keycloakAdminUsername?: string;
 }
