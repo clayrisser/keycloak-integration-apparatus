@@ -4,7 +4,7 @@
  * File Created: 30-08-2021 18:07:12
  * Author: Clay Risser <email@clayrisser.com>
  * -----
- * Last Modified: 29-11-2022 11:48:34
+ * Last Modified: 17-06-2023 20:36:42
  * Modified By: Clay Risser
  * -----
  * Risser Labs LLC (c) Copyright 2021
@@ -75,6 +75,7 @@ export class SocketService {
       realmName,
       redirectUris,
       serviceAccountsEnabled,
+      webOrigins,
     }: CreateClientOptions = {
       adminUsername: 'admin',
       attributes: {},
@@ -88,6 +89,7 @@ export class SocketService {
       realmName: 'master',
       redirectUris: ['*'],
       serviceAccountsEnabled: true,
+      webOrigins: ['*'],
       ...options,
     };
     await this.ready(baseUrl);
@@ -104,18 +106,19 @@ export class SocketService {
       adminPassword,
       adminUsername,
       attributes,
-      description,
       authorizationServicesEnabled,
       baseUrl,
       clientId,
       clientSecret,
       consentRequired,
+      description,
       directAccessGrantsEnabled,
       implicitFlowEnabled,
       name,
       realmName,
       redirectUris,
       serviceAccountsEnabled,
+      webOrigins,
     };
     if (client) {
       // this.logger.log(`updating client ${clientId}`);
@@ -363,6 +366,7 @@ export interface CreateClientOptions {
   realmName?: string;
   redirectUris?: string[];
   serviceAccountsEnabled?: boolean;
+  webOrigins?: string[];
 }
 
 export type CreateClientResult = CreateClientOptions;

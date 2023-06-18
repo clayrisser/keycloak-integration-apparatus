@@ -4,7 +4,7 @@
  * File Created: 20-11-2022 07:22:58
  * Author: Clay Risser
  * -----
- * Last Modified: 17-06-2023 14:36:21
+ * Last Modified: 17-06-2023 20:37:32
  * Modified By: Clay Risser
  * -----
  * Risser Labs LLC (c) Copyright 2021 - 2022
@@ -80,6 +80,7 @@ export class PlugConfig {
   realm?: string;
   redirectUris?: string;
   replicate?: string;
+  webOrigins?: string;
 }
 
 export class SocketConfig {
