@@ -4,7 +4,7 @@
  * File Created: 30-08-2021 15:55:45
  * Author: Clay Risser <email@clayrisser.com>
  * -----
- * Last Modified: 17-06-2023 20:38:04
+ * Last Modified: 26-06-2023 05:58:11
  * Modified By: Clay Risser
  * -----
  * Risser Labs LLC (c) Copyright 2021
@@ -51,22 +51,9 @@ export class SocketController {
 
   @Post('coupled')
   async postCoupled(@Body() body: CoupledBody): Promise<void> {
-    const replicate = (body.plugConfig.replicate || '').toLowerCase() !== 'false';
-    const name = body.plug.metadata?.name ? `keycloak-${body.plug.metadata?.name}` : '';
-    const ns = body.plug.metadata?.namespace;
-    if (!body.plugConfig.clientId) {
-      if (replicate && name && ns) {
-        await this.socketService.applySecret(name, ns, {
-          ADMIN_PASSWORD: body.socketConfig.keycloakAdminPassword,
-          ADMIN_USERNAME: body.socketConfig.keycloakAdminUsername || 'admin',
-          BASE_URL: body.socketConfig.keycloakBaseUrl,
-          REALM_NAME: body.plugConfig.realm || body.socketConfig.defaultRealm || 'main',
-        });
-      }
-      return;
-    }
+    if (!body.plugConfig.clientId) return;
     const attributes = YAML.parse(body.plugConfig.attributes || '');
-    const result = await this.socketService.createOrUpdateClient({
+    await this.socketService.createOrUpdateClient({
       adminPassword: body.socketConfig.keycloakAdminPassword,
       adminUsername: body.socketConfig.keycloakAdminUsername,
       attributes,
@@ -107,17 +94,6 @@ export class SocketController {
           }
         : {}),
     });
-    if (replicate && name && ns) {
-      await this.socketService.applySecret(name, ns, {
-        ADMIN_PASSWORD: result.adminPassword,
-        ADMIN_USERNAME: result.adminUsername || '',
-        BASE_URL: result.baseUrl || '',
-        CLIENT_ID: result.clientId,
-        CLIENT_SECRET: result.clientSecret || '',
-        REALM_NAME: result.realmName || '',
-        REDIRECT_URIS: (result.redirectUris || []).join(','),
-      });
-    }
   }
 
   @Post('updated')
