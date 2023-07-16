@@ -3,7 +3,7 @@
 # File Created: 06-12-2021 08:30:36
 # Author: Clay Risser <email@clayrisser.com>
 # -----
-# Last Modified: 20-11-2022 07:48:29
+# Last Modified: 16-07-2023 06:10:07
 # Modified By: Clay Risser
 # -----
 # Risser Labs LLC (c) Copyright 2021 - 2022
@@ -29,7 +29,7 @@ export NAME := $(shell $(NODE) -e "console.log(require('../package.json').name)"
 export VERSION := $(shell $(NODE) -e "console.log(require('../package.json').version)")
 export DOCKER_COMPOSE ?= docker-compose
 export CONTEXT := ..
-export REGISTRY := registry.gitlab.com/risserlabs/community
+export REGISTRY := registry.gitlab.com/bitspur/rock8s
 
 -include $(MKPM)/docker
 
