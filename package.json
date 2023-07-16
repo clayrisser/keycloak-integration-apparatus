@@ -176,7 +176,7 @@
     "indent": 4
   },
   "docker": {
-    "registry": "registry.gitlab.com/risserlabs/community"
+    "registry": "registry.gitlab.com/bitspur/rock8s"
   },
   "packageManager": "yarn@3.2.0",
   "prettier": "eslint-config-alloy/.prettierrc.js",

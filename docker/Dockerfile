@@ -1,4 +1,4 @@
-FROM registry.gitlab.com/risserlabs/community/images/node:16.14.2 AS builder
+FROM registry.gitlab.com/bitspur/rock8s/images/node:16.20.1 AS builder
 
 WORKDIR /code
 
