@@ -4,7 +4,7 @@
  * File Created: 30-08-2021 15:55:45
  * Author: Clay Risser <email@clayrisser.com>
  * -----
- * Last Modified: 10-08-2023 06:41:52
+ * Last Modified: 10-08-2023 06:46:39
  * Modified By: Clay Risser
  * -----
  * Risser Labs LLC (c) Copyright 2021
@@ -63,21 +63,14 @@ export class SocketController {
       description: body.plugConfig.description,
       realmName: body.plugConfig.realm || body.socketConfig.defaultRealm || 'main',
       protocol: body.plugConfig.protocol?.toLowerCase() === 'saml' ? 'saml' : 'openid-connect',
-      ...(body.plugConfig.redirectUris
-        ? {
-            redirectUris: body.plugConfig.redirectUris.split(','),
-          }
-        : {}),
+      redirectUris: body.plugConfig.redirectUris ? body.plugConfig.redirectUris.split(',') : ['*'],
+      webOrigins: body.plugConfig.webOrigins ? body.plugConfig.webOrigins.split(',') : ['*'],
       ...(body.plugConfig.webOrigins
         ? {
             redirectUris: body.plugConfig.webOrigins.split(','),
           }
         : {}),
-      ...(body.plugConfig.webOrigins
-        ? {
-            webOrigins: body.plugConfig.webOrigins.split(','),
-          }
-        : {}),
+
       ...(body.plugConfig.name
         ? {
             name: body.plugConfig.name,
