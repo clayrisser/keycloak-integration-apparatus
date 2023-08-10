@@ -5,13 +5,13 @@ WORKDIR /code
 RUN curl -Lo /usr/bin/yq https://github.com/mikefarah/yq/releases/download/v4.25.1/yq_linux_amd64 && \
     chmod +x /usr/bin/yq
 
-COPY package.json .yarnrc.yml yarn.lock *.mk default.env Makefile ./
-COPY .mkpm/.bootstrap.mk .mkpm/.cache.tar.gz .mkpm/
+COPY package.json .yarnrc.yml yarn.lock *.mk default.env mkpm.json mkpm Mkpmfile ./
+COPY .mkpm/cache.tar.gz .mkpm/
 COPY .yarn .yarn
 COPY .git .git
-RUN make -s +install
+RUN ./mkpm +install
 COPY . .
-RUN make -s +build
+RUN ./mkpm +build
 RUN yarn workspaces focus --production
 RUN mkdir -p /tmp/app && \
     mv dist \
