@@ -3,7 +3,7 @@
 # File Created: 06-12-2021 08:30:36
 # Author: Clay Risser <email@clayrisser.com>
 # -----
-# Last Modified: 16-07-2023 06:10:07
+# Last Modified: 10-08-2023 06:48:40
 # Modified By: Clay Risser
 # -----
 # Risser Labs LLC (c) Copyright 2021 - 2022
@@ -20,10 +20,11 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-include ../mkpm.mk
-ifneq (,$(MKPM_READY))
+include $(MKPM)/mkpm
 include $(MKPM)/gnu
 include $(MKPM)/dotenv
+
+NODE ?= node
 
 export NAME := $(shell $(NODE) -e "console.log(require('../package.json').name)")
 export VERSION := $(shell $(NODE) -e "console.log(require('../package.json').version)")
@@ -32,5 +33,3 @@ export CONTEXT := ..
 export REGISTRY := registry.gitlab.com/bitspur/rock8s
 
 -include $(MKPM)/docker
-
-endif
