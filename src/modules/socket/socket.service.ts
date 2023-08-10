@@ -4,7 +4,7 @@
  * File Created: 30-08-2021 18:07:12
  * Author: Clay Risser <email@clayrisser.com>
  * -----
- * Last Modified: 17-06-2023 20:36:42
+ * Last Modified: 10-08-2023 06:41:16
  * Modified By: Clay Risser
  * -----
  * Risser Labs LLC (c) Copyright 2021
@@ -163,6 +163,7 @@ export class SocketService {
       protocol,
       publicClient: !clientSecret?.length,
       redirectUris,
+      webOrigins,
       ...(clientSecret?.length
         ? {
             authorizationServicesEnabled,

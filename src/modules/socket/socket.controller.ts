@@ -4,7 +4,7 @@
  * File Created: 30-08-2021 15:55:45
  * Author: Clay Risser <email@clayrisser.com>
  * -----
- * Last Modified: 26-06-2023 05:58:11
+ * Last Modified: 10-08-2023 06:41:52
  * Modified By: Clay Risser
  * -----
  * Risser Labs LLC (c) Copyright 2021
@@ -71,6 +71,11 @@ export class SocketController {
       ...(body.plugConfig.webOrigins
         ? {
             redirectUris: body.plugConfig.webOrigins.split(','),
+          }
+        : {}),
+      ...(body.plugConfig.webOrigins
+        ? {
+            webOrigins: body.plugConfig.webOrigins.split(','),
           }
         : {}),
       ...(body.plugConfig.name
