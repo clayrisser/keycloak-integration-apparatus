@@ -1,4 +1,4 @@
-FROM registry.gitlab.com/bitspur/rock8s/images/node:16.20.1 AS builder
+FROM registry.gitlab.com/bitspur/rock8s/images/node:18.18.2-3.18 as builder
 
 WORKDIR /code
 
@@ -9,9 +9,9 @@ COPY package.json .yarnrc.yml yarn.lock *.mk default.env mkpm.json mkpm Mkpmfile
 COPY .mkpm/cache.tar.gz .mkpm/
 COPY .yarn .yarn
 COPY .git .git
-RUN ./mkpm +install
+RUN cp default.env .env && yarn
 COPY . .
-RUN ./mkpm +build
+RUN yarn nest build --webpack
 RUN yarn workspaces focus --production
 RUN mkdir -p /tmp/app && \
     mv dist \
@@ -19,7 +19,7 @@ RUN mkdir -p /tmp/app && \
     package.json \
     .env /tmp/app
 
-FROM node:16-alpine
+FROM node:18.18.2-alpine
 
 WORKDIR /opt/app
 
